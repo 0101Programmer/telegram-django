@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Best Price<br>Hardware Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user_page">Личный кабинет</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Изменение данных</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1>Изменение данных пользователя</h1>
+<br>
+<strong>Старое значение:</strong> {{ active_user_data_to_change }} ({{ user_data_to_change_name }})
+<br>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.variable.label }}
+        {{ form.variable }}
+    </div>
+    {% if user_data_to_change == "password" %}
+    <div class="form-group">
+        {{ form.confirmation_variable.label }}
+        {{ form.confirmation_variable }}
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Подтвердить</button>
+</form>
+{% endblock %}

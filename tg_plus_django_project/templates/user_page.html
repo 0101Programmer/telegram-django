@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Best Price<br>Hardware Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Личный кабинет</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css_styles/user_page_table.css' %}">
+<link rel="stylesheet" href="{% static 'css_styles/dropdown_list_user_page.css' %}">
+
+
+<h1>Личный кабинет</h1>
+
+<table>
+    <caption>Персональная информация</caption>
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Пароль</th>
+            <th>Логин в Телеграме</th>
+            <th>Номер телефона</th>
+            <th>Дата рождения</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ active_user_data.name }}</td>
+            <td>{{ active_user_data.email }}</td>
+            <td>
+                <a href="password">Посмотреть или изменить пароль</a>
+            </td>
+            {% if active_user_data.tg_username %}
+            <td>{{ active_user_data.tg_username }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            <td>{{ active_user_data.phone_number }}</td>
+            <td>{{ active_user_data.date_of_birth }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="dropdown">
+    <button class="dropbtn">Изменить данные</button>
+    <div class="dropdown-content">
+        <a href="name">Имя</a>
+        <a href="email">Email</a>
+        <a href="password">Пароль</a>
+        <a href="tg_username">Логин в Телеграм</a>
+        <a href="phone_number">Номер телефона</a>
+    </div>
+</div>
+
+<br>
+<br>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Выйти из аккаунта</button>
+</form>
+
+<br>
+<br>
+
+<table>
+    <caption>Заказы</caption>
+    <thead>
+        <tr>
+            <th>Заказ №</th>
+            <th>Статус</th>
+            <th>Товар</th>
+            <th>Цена (за шт.)</th>
+            <th>Кол-во (шт.)</th>
+            <th colspan="2">Итого, руб.</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for key, val in active_user_data.orders.items %}
+        <tr>
+            <td>{{ key }}</td>
+            {% if val.status == "ordered" %}
+            <td>Оформлен, <a href="confirm_my_order/{{ key }}">оплатить</a></td>
+            {% elif val.status == "canceled" %}
+            <td>Отменён</td>
+            {% elif val.status == "confirmed" %}
+            <td>Оплачен, ожидается доставка</td>
+            {% else %}
+            <td>None</td>
+            {% endif %}
+            <td>{{ val.model_name_for_client }}</td>
+            <td>{{ val.product_price }}</td>
+            <td>{{ val.product_amount }}</td>
+            <td>{{ val.total }}</td>
+            {% if val.status == "ordered" %}
+            <td colspan="2"><a href="change_my_order/{{ key }}">Редактировать</a></td>
+            {% elif val.status == "canceled" %}
+            <td colspan="2">---</td>
+            {% elif val.status == "confirmed" %}
+            <td colspan="2">---</td>
+            {% else %}
+            <td>None</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

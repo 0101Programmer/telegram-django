@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Best Price<br>Hardware Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="catalog_page">Каталог</a>
+            </li>
+            {% if is_active %}
+            <li class="nav-item">
+                <a class="nav-link" href="user_page">Личный кабинет</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="reg_and_auth_page">Вход и регистрация</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="contacts_page">Контакты</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1>Добро пожаловать в наш магазин!</h1>
+<p>Популярное сейчас:</p>
+<p><a href="/console_page/ps5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
+height="300" alt="img"></a></p>
+<p>PlayStation 5</p>
+{% endblock %}

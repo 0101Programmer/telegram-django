@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Best Price<br>Hardware Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Контакты</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1>Наши контакты</h1>
+
+<dl>
+    <dt>Телефон</dt>
+    <dd>8-499-555-35-35</dd>
+    <dt>Электронная почта</dt>
+    <dd>online@mail.ru</dd>
+    <dt>Адрес</dt>
+    <dd>LLC, 901 Cherry Ave., San Bruno, CA 94066, USA.</dd>
+</dl>
+
+{% endblock %}

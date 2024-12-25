@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Best Price<br>Hardware Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reg_and_auth_page">Регистрация</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Вход в личный кабинет</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css_styles/reg_log_forms.css' %}">
+
+<h1>Авторизация</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.email.label }}
+        {{ form.email }}
+    </div>
+    <div class="form-group">
+        {{ form.password.label }}
+        {{ form.password }}
+    </div>
+    <button type="submit" class="btn btn-primary">Авторизоваться</button>
+</form>
+
+{% endblock %}
+
