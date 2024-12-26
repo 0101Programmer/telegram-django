@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
@@ -110,8 +112,9 @@ class RegFormView(View):
                 return render(request, 'error.html', {'error': error})
 
             else:
+                user_data = {'user_sys_info': check_user_sys_info()}
                 User.objects.create(name=name, email=email, password=password, tg_username=tg_username,
-                                    phone_number=phone_number, date_of_birth=date_of_birth, is_active=True)
+                                    phone_number=phone_number, date_of_birth=date_of_birth, user_data=user_data, is_active=True)
                 return HttpResponseRedirect('/user_page')
 
         return render(request, self.template_name, {'form': form})

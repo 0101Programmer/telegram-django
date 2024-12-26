@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import datetime
+import platform
 
 import re
 import phonenumbers
@@ -92,3 +93,14 @@ def is_valid_card_num(num_str):
             return False
 
     return True
+
+
+def check_user_sys_info():
+    current_sys_info = {"system": platform.uname().system,
+                        "node_name": platform.uname().node,
+                        "release": platform.uname().release,
+                        "version": platform.uname().version,
+                        "machine": platform.uname().machine,
+                        "processor": platform.uname().processor,
+                        }
+    return current_sys_info
