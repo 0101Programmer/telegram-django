@@ -1,6 +1,13 @@
 from django.urls import path
 from django.views.generic import TemplateView
 from .views import *
+from .views_package.home_view import *
+from .views_package.user_page_and_change_self_data_view import *
+from .views_package.confirm_cancel_change_order_views import *
+from .views_package.login_registration_views import *
+from .views_package.catalog_page_view import *
+from .views_package.consoles_and_console_model_page_views import *
+
 
 urlpatterns = [
     path('', HomePage.as_view(), name='home'),
