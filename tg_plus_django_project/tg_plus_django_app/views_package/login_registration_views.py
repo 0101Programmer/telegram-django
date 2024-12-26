@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
@@ -115,6 +116,7 @@ class RegFormView(View):
                 user_data = {'user_sys_info': check_user_sys_info()}
                 User.objects.create(name=name, email=email, password=password, tg_username=tg_username,
                                     phone_number=phone_number, date_of_birth=date_of_birth, user_data=user_data, is_active=True)
-                return HttpResponseRedirect('/user_page')
+                max_id = User.objects.aggregate(max_id=Max('id'))['max_id']
+                return HttpResponseRedirect(f'/{max_id}')
 
         return render(request, self.template_name, {'form': form})

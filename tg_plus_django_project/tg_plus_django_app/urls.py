@@ -11,6 +11,7 @@ from .views_package.consoles_and_console_model_page_views import *
 
 urlpatterns = [
     path('', HomePage.as_view(), name='home'),
+    path('<int:user_id>', HomePageById.as_view(), name='authed_home'),
     path('contacts_page/', TemplateView.as_view(template_name='contacts_page.html')),
     path('reg_and_auth_page/', RegFormView.as_view(), name='reg_and_auth_page'),
     path('auth_page/', LogFormView.as_view(), name='user_page'),
