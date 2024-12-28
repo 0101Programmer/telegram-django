@@ -42,6 +42,10 @@ dp.register_message_handler(
 dp.register_callback_query_handler(
     ih.info_address, text='address'
 )
+
+dp.register_callback_query_handler(
+    ih.info_about, text='about'
+)
 # --- --- --- --- --- --- --- ---
 
 # Выбор категории товара:
