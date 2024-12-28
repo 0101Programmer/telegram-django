@@ -21,8 +21,16 @@ async def reg_auth_choice(message):
             loc_idx = 0
 
             for k, v in is_registered[7].items():
+
+                if v["status"] == 'ordered':
+                    status_name_for_client = 'Оформлен'
+                elif v["status"] == 'canceled':
+                    status_name_for_client = 'Отменён'
+                else:
+                    status_name_for_client = 'Оплачен, ожидается доставка'
+
                 new_row = [k,
-                           f'{v["status"]}',
+                           status_name_for_client,
                            f'{v["model_name_for_client"]}',
                            f'{v["product_price"]}',
                            f'{v["product_amount"]}',
