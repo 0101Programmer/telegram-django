@@ -1,8 +1,6 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import datetime
-import platform
-
 import re
 import phonenumbers
 from phonenumbers import carrier
