@@ -168,7 +168,7 @@ class ChangeOrderView(View):
 
         if form.is_valid():
             product_amount = form.cleaned_data['product_amount']
-            user_filter = User.objects.values().get(is_active=True)
+            user_filter = User.objects.values().get(id=user_id)
 
             User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
                                                                      {f'{order_id_to_change}': {"model_name":

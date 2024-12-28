@@ -63,7 +63,7 @@ class ConsoleModelPageViewById(View):
         form = self.form_class(request.POST)
         product_filter = Product.objects.values().get(model_name=console_model)
 
-        user_filter = User.objects.values().get(is_active=True)
+        user_filter = User.objects.values().get(id=user_id)
 
         if form.is_valid():
             product_amount = form.cleaned_data['product_amount']
