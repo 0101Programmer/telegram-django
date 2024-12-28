@@ -10,6 +10,15 @@ class UserPageView(View):
     template_name = 'user_page.html'
 
     def get(self, request, user_id):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
+
         active_user_filter = User.objects.values().filter(id=user_id)
         active_user_data = ''
 
@@ -23,6 +32,9 @@ class UserPageView(View):
             updated_at=datetime.datetime.now().astimezone().strftime(
                 "%Y-%m-%d | %H:%M:%S %z | %Z")
         )
+
+        del request.session['id']
+
         return HttpResponseRedirect('/')
 
 
@@ -32,6 +44,14 @@ class ChangeDataView(View):
     template_name = 'change_data_page.html'
 
     def get(self, request, user_id, user_data_to_change):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
 
         user_data_to_change_name = ''
         if user_data_to_change == 'name':

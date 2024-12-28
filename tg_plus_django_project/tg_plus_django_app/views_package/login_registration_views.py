@@ -1,10 +1,9 @@
-import json
-
+from config import *
 from django.db.models import Max
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
-from config import *
+
 from ..forms import *
 from ..models import *
 
@@ -48,6 +47,8 @@ class LogFormView(View):
 
                 for _ in user_filter:
                     user_data = _
+
+                request.session['id'] = user_data["id"]
 
                 return HttpResponseRedirect(f'/user_page/{user_data["id"]}')
 
@@ -124,6 +125,9 @@ class RegFormView(View):
                 User.objects.create(name=name, email=email, password=password, tg_username=tg_username,
                                     phone_number=phone_number, date_of_birth=date_of_birth, user_data=user_data, is_active=True)
                 max_id = User.objects.aggregate(max_id=Max('id'))['max_id']
+
+                request.session['id'] = max_id
+
                 return HttpResponseRedirect(f'/{max_id}')
 
         return render(request, self.template_name, {'form': form})

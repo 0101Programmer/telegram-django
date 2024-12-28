@@ -12,6 +12,15 @@ class ConfirmOrderView(View):
     template_name = 'confirm_order_page.html'
 
     def get(self, request, user_id, order_id_to_change):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
+
         form = self.form_class(initial=self.initial)
         active_user_filter = User.objects.values().filter(id=user_id)
         active_user_order_to_change = ''
@@ -89,6 +98,15 @@ class CancelOrderView(View):
     template_name = 'cancel_order_page.html'
 
     def get(self, request, user_id, order_id_to_change):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
+
         user_filter = User.objects.values().get(is_active=True)
 
         User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
@@ -125,6 +143,15 @@ class ChangeOrderView(View):
     template_name = 'change_order_page.html'
 
     def get(self, request, user_id,  order_id_to_change):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
+
         form = self.form_class(initial=self.initial)
         active_user_filter = User.objects.values().filter(id=user_id)
         active_user_order_to_change = ''

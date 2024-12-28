@@ -17,6 +17,15 @@ class ConsolesPageViewById(View):
     template_name = 'cat_pages/cons_page.html'
 
     def get(self, request, user_id):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+
+            return render(request, 'error.html', {'error': error})
         return render(request, self.template_name, {"user_id": user_id, })
 
 
@@ -34,6 +43,15 @@ class ConsoleModelPageViewById(View):
     template_name = 'cat_pages/cons_model_page.html'
 
     def get(self, request, user_id, console_model):
+
+        try:
+            if user_id != request.session['id']:
+                error = 'Доступ запрещён'
+                return render(request, 'error.html', {'error': error})
+        except KeyError:
+            error = 'Доступ запрещён'
+            return render(request, 'error.html', {'error': error})
+
         form = self.form_class(initial=self.initial)
 
         product_filter = Product.objects.values().get(model_name=console_model)
