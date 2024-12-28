@@ -16,7 +16,6 @@ class User(models.Model):
     created_at = models.CharField(default=datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"))
     updated_at = models.CharField(default=datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"))
     user_data = models.JSONField(blank=True, null=True)
-    is_active = models.BooleanField()
 
 
 class Product(models.Model):
