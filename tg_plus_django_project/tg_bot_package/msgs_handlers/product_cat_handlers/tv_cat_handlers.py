@@ -1,7 +1,6 @@
 import tg_plus_django_project.tg_bot_package.keyboards_file as kb_file
 
 
-
 async def available_tv_models(call):
     await call.message.answer('У нас есть следующие модели...', reply_markup=kb_file.tv_models_choice_kb)
     await call.answer()
