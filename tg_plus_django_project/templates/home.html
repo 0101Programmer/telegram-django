@@ -11,21 +11,27 @@
             <li class="nav-item active">
                 <a class="nav-link" href="#">Главная</a>
             </li>
+            {% if user_id %}
             <li class="nav-item">
-                <a class="nav-link" href="catalog_page">Каталог</a>
+                <a class="nav-link" href="catalog_page/{{ user_id }}">Каталог</a>
             </li>
-            {% if is_active %}
             <li class="nav-item">
-                <a class="nav-link" href="user_page">Личный кабинет</a>
+                <a class="nav-link" href="user_page/{{ user_id }}">Личный кабинет</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="contacts_page/{{ user_id }}">Контакты</a>
             </li>
             {% else %}
             <li class="nav-item">
+                <a class="nav-link" href="catalog_page">Каталог</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="reg_and_auth_page">Вход и регистрация</a>
             </li>
-            {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="contacts_page">Контакты</a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
@@ -34,7 +40,13 @@
 {% block content %}
 <h1>Добро пожаловать в наш магазин!</h1>
 <p>Популярное сейчас:</p>
+{% if user_id %}
+<p><a href="/console_page/{{ user_id }}/ps5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
+height="300" alt="img"></a></p>
+<p>PlayStation 5</p>
+{% else %}
 <p><a href="/console_page/ps5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
 height="300" alt="img"></a></p>
 <p>PlayStation 5</p>
+{% endif %}
 {% endblock %}

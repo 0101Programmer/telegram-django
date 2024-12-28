@@ -11,9 +11,9 @@ class ConfirmOrderView(View):
     initial = {'key': 'value'}
     template_name = 'confirm_order_page.html'
 
-    def get(self, request, order_id_to_change):
+    def get(self, request, user_id, order_id_to_change):
         form = self.form_class(initial=self.initial)
-        active_user_filter = User.objects.values().filter(is_active__exact=True)
+        active_user_filter = User.objects.values().filter(id=user_id)
         active_user_order_to_change = ''
 
         for _ in active_user_filter:
@@ -21,9 +21,9 @@ class ConfirmOrderView(View):
 
         return render(request, self.template_name, {'active_user_filter': active_user_filter,
                                                     'active_user_order_to_change': active_user_order_to_change,
-                                                    'order_id_to_change': order_id_to_change, 'form': form, })
+                                                    'order_id_to_change': order_id_to_change, 'form': form, 'user_id': user_id, })
 
-    def post(self, request, order_id_to_change):
+    def post(self, request, user_id, order_id_to_change):
         form = self.form_class(request.POST)
 
         if form.is_valid():
@@ -44,9 +44,9 @@ class ConfirmOrderView(View):
                 return render(request, 'error.html', {'error': error})
 
             else:
-                user_filter = User.objects.values().get(is_active=True)
+                user_filter = User.objects.values().get(id=user_id)
 
-                User.objects.filter(is_active__exact=True).update(orders=user_filter['orders'] |
+                User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
                                                                          {f'{order_id_to_change}': {"model_name":
                                                                                                         user_filter[
                                                                                                             'orders'][
@@ -80,7 +80,7 @@ class ConfirmOrderView(View):
                                                                                                         "card_date": card_date,
                                                                                                         "card_cvc": card_cvc}, }})
 
-                return HttpResponseRedirect('/user_page')
+                return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})
 
@@ -88,10 +88,10 @@ class ConfirmOrderView(View):
 class CancelOrderView(View):
     template_name = 'cancel_order_page.html'
 
-    def get(self, request, order_id_to_change):
+    def get(self, request, user_id, order_id_to_change):
         user_filter = User.objects.values().get(is_active=True)
 
-        User.objects.filter(is_active__exact=True).update(orders=user_filter['orders'] |
+        User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
                                                                  {f'{order_id_to_change}': {"model_name":
                                                                                                 user_filter['orders'][
                                                                                                     f'{order_id_to_change}'][
@@ -116,7 +116,7 @@ class CancelOrderView(View):
                                                                                                     f'{order_id_to_change}'][
                                                                                                     'total'], }})
 
-        return HttpResponseRedirect('/user_page')
+        return HttpResponseRedirect(f'/user_page/{user_id}')
 
 
 class ChangeOrderView(View):
@@ -124,9 +124,9 @@ class ChangeOrderView(View):
     initial = {'key': 'value'}
     template_name = 'change_order_page.html'
 
-    def get(self, request, order_id_to_change):
+    def get(self, request, user_id,  order_id_to_change):
         form = self.form_class(initial=self.initial)
-        active_user_filter = User.objects.values().filter(is_active__exact=True)
+        active_user_filter = User.objects.values().filter(id=user_id)
         active_user_order_to_change = ''
 
         for _ in active_user_filter:
@@ -134,16 +134,16 @@ class ChangeOrderView(View):
 
         return render(request, self.template_name, {'active_user_filter': active_user_filter,
                                                     'active_user_order_to_change': active_user_order_to_change,
-                                                    'order_id_to_change': order_id_to_change, 'form': form, })
+                                                    'order_id_to_change': order_id_to_change, 'form': form, 'user_id': user_id, })
 
-    def post(self, request, order_id_to_change):
+    def post(self, request, user_id, order_id_to_change):
         form = self.form_class(request.POST)
 
         if form.is_valid():
             product_amount = form.cleaned_data['product_amount']
             user_filter = User.objects.values().get(is_active=True)
 
-            User.objects.filter(is_active__exact=True).update(orders=user_filter['orders'] |
+            User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
                                                                      {f'{order_id_to_change}': {"model_name":
                                                                                                     user_filter[
                                                                                                         'orders'][
@@ -173,6 +173,6 @@ class ChangeOrderView(View):
                                                                                                         f'{order_id_to_change}'][
                                                                                                         'product_price'],
                                                                                                     2), }})
-            return HttpResponseRedirect('/user_page')
+            return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})

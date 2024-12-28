@@ -9,19 +9,20 @@ from ..models import *
 class UserPageView(View):
     template_name = 'user_page.html'
 
-    def get(self, request, *args, **kwargs):
-        active_user_filter = User.objects.values().filter(is_active__exact=True)
+    def get(self, request, user_id):
+        active_user_filter = User.objects.values().filter(id=user_id)
         active_user_data = ''
 
         for _ in active_user_filter:
             active_user_data = _
 
-        return render(request, self.template_name, {'active_user_data': active_user_data})
+        return render(request, self.template_name, {'active_user_data': active_user_data, "user_id": user_id})
 
-    def post(self, request, *args, **kwargs):
-        User.objects.filter(is_active__exact=True).update(is_active=False,
-                                                          updated_at=datetime.datetime.now().astimezone().strftime(
-                                                              "%Y-%m-%d | %H:%M:%S %z | %Z"))
+    def post(self, request, user_id):
+        User.objects.filter(id=user_id).update(
+            updated_at=datetime.datetime.now().astimezone().strftime(
+                "%Y-%m-%d | %H:%M:%S %z | %Z")
+        )
         return HttpResponseRedirect('/')
 
 
@@ -30,7 +31,7 @@ class ChangeDataView(View):
     initial = {'key': 'value'}
     template_name = 'change_data_page.html'
 
-    def get(self, request, user_data_to_change):
+    def get(self, request, user_id, user_data_to_change):
 
         user_data_to_change_name = ''
         if user_data_to_change == 'name':
@@ -53,9 +54,10 @@ class ChangeDataView(View):
 
         return render(request, self.template_name, {'active_user_data_to_change': active_user_data_to_change,
                                                     'user_data_to_change': user_data_to_change, 'form': form,
-                                                    'user_data_to_change_name': user_data_to_change_name, })
+                                                    'user_data_to_change_name': user_data_to_change_name,
+                                                    'user_id': user_id, })
 
-    def post(self, request, user_data_to_change):
+    def post(self, request, user_id, user_data_to_change):
         form = self.form_class(request.POST)
 
         if form.is_valid():
@@ -71,10 +73,10 @@ class ChangeDataView(View):
                     error = 'Пожалуйста, укажите email в формате example@mail.ru'
                     return render(request, 'error.html', {'error': error})
                 else:
-                    User.objects.filter(is_active__exact=True).update(email=variable,
-                                                                      updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                          "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                    return HttpResponseRedirect('/user_page')
+                    User.objects.filter(id=user_id).update(email=variable,
+                                                           updated_at=datetime.datetime.now().astimezone().strftime(
+                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                    return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'password':
                 if not password_validate(variable):
@@ -87,10 +89,10 @@ class ChangeDataView(View):
                     error = 'Пароли не совпадают'
                     return render(request, 'error.html', {'error': error})
                 else:
-                    User.objects.filter(is_active__exact=True).update(password=variable,
-                                                                      updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                          "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                    return HttpResponseRedirect('/user_page')
+                    User.objects.filter(id=user_id).update(password=variable,
+                                                           updated_at=datetime.datetime.now().astimezone().strftime(
+                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                    return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'tg_username':
                 is_tg_username_existed = User.objects.filter(tg_username__exact=variable)
@@ -98,10 +100,10 @@ class ChangeDataView(View):
                     error = 'Пользователь с таким телеграм логином уже зарегистрирован'
                     return render(request, 'error.html', {'error': error})
                 else:
-                    User.objects.filter(is_active__exact=True).update(tg_username=variable,
-                                                                      updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                          "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                    return HttpResponseRedirect('/user_page')
+                    User.objects.filter(id=user_id).update(tg_username=variable,
+                                                           updated_at=datetime.datetime.now().astimezone().strftime(
+                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                    return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'phone_number':
                 is_phone_existed = User.objects.filter(phone_number__exact=variable)
@@ -112,15 +114,15 @@ class ChangeDataView(View):
                     error = 'Введите номер телефона в международном формате. (Например, +7 999 999 99 99)'
                     return render(request, 'error.html', {'error': error})
                 else:
-                    User.objects.filter(is_active__exact=True).update(phone_number=variable,
-                                                                      updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                          "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                    return HttpResponseRedirect('/user_page')
+                    User.objects.filter(id=user_id).update(phone_number=variable,
+                                                           updated_at=datetime.datetime.now().astimezone().strftime(
+                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                    return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'name':
-                User.objects.filter(is_active__exact=True).update(name=variable,
-                                                                  updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                      "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                return HttpResponseRedirect('/user_page')
+                User.objects.filter(id=user_id).update(name=variable,
+                                                       updated_at=datetime.datetime.now().astimezone().strftime(
+                                                           "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})

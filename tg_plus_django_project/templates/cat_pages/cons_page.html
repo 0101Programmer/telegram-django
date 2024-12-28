@@ -9,12 +9,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            {% if user_id %}
+            <li class="nav-item">
+                <a class="nav-link" href="/{{ user_id }}">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/catalog_page/{{ user_id }}">Каталог</a>
+            </li>
+            {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/catalog_page">Каталог</a>
             </li>
+            {% endif %}
             <li class="nav-item active">
                 <a class="nav-link active" href="#">Игровые консоли</a>
             </li>

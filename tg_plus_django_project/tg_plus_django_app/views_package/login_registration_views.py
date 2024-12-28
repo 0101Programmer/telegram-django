@@ -39,10 +39,17 @@ class LogFormView(View):
                 error = 'Пароль не подходит'
                 return render(request, 'error.html', {'error': error})
             else:
-                User.objects.filter(email__exact=email).update(is_active=True,
+                User.objects.filter(email=email).update(
                                                                updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                   "%Y-%m-%d | %H:%M:%S %z | %Z"))
-                return HttpResponseRedirect('/user_page')
+                                                                   "%Y-%m-%d | %H:%M:%S %z | %Z")
+                )
+                user_filter = User.objects.values().filter(email=email)
+                user_data = ''
+
+                for _ in user_filter:
+                    user_data = _
+
+                return HttpResponseRedirect(f'/user_page/{user_data["id"]}')
 
         return render(request, self.template_name, {'form': form})
 

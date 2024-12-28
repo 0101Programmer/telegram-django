@@ -9,9 +9,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            {% if user_id %}
+            <li class="nav-item">
+                <a class="nav-link" href="/{{ user_id }}">Главная</a>
+            </li>
+            {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link active" href="#">Каталог</a>
             </li>
@@ -23,6 +29,20 @@
 {% block content %}
 <h1>Сейчас у нас есть следующие категории товаров</h1>
 
+{% if user_id %}
+<p><a href="/console_page/{{ user_id }}"><img src="/static/cat_pics/cons_cat.png" width="500"
+height="300" alt="img"></a></p>
+<p>Игровые консоли</p>
+
+<p><a href="#"><img src="/static/cat_pics/tv_cat.png" width="500"
+height="300" alt="img"></a></p>
+<p>Телевизоры</p>
+
+<p><a href="#"><img src="/static/cat_pics/laptops_cat.png" width="500"
+height="300" alt="img"></a></p>
+<p>Ноутбуки</p>
+
+{% else %}
 <p><a href="/console_page"><img src="/static/cat_pics/cons_cat.png" width="500"
 height="300" alt="img"></a></p>
 <p>Игровые консоли</p>
@@ -34,4 +54,6 @@ height="300" alt="img"></a></p>
 <p><a href="#"><img src="/static/cat_pics/laptops_cat.png" width="500"
 height="300" alt="img"></a></p>
 <p>Ноутбуки</p>
+{% endif %}
+
 {% endblock %}

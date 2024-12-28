@@ -8,9 +8,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            {% if user_id %}
+            <li class="nav-item">
+                <a class="nav-link" href="/{{ user_id }}">Главная</a>
+            </li>
+            {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
+            {% endif %}
             <li class="nav-item active">
                 <a class="nav-link" href="#">Контакты</a>
             </li>
