@@ -69,9 +69,6 @@ dp.register_message_handler(
 dp.register_message_handler(
     moh.reg_choice, text='Я новый клиент'
 )
-dp.register_callback_query_handler(
-    moh.go_back_to_my_orders_func, text='back_to_my_orders_kb'
-)
 # --- --- --- --- --- --- --- ---
 
 # Регистрация нового пользователя:

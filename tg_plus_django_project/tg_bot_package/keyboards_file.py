@@ -35,7 +35,7 @@ new_client_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text='Зарегистрироваться на сайте', url='http://127.0.0.1:8000/')],
         [InlineKeyboardButton(text='Зарегистрироваться здесь', callback_data='new_client_registration')],
-        [InlineKeyboardButton(text='Назад', callback_data='back_to_my_orders_kb')],
+        [InlineKeyboardButton(text='В главное меню', callback_data='back_to_home')],
     ]
 )
 
@@ -43,14 +43,6 @@ successful_reg_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text='В личный кабинет', url='http://127.0.0.1:8000/')],
         [InlineKeyboardButton(text='В главное меню', callback_data='back_to_home')],
-    ]
-)
-
-old_client_kb = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text='Войти в личный кабинет на сайте', url='http://127.0.0.1:8000/')],
-        [InlineKeyboardButton(text='Войти в личный кабинет здесь', callback_data='old_client_login')],
-        [InlineKeyboardButton(text='Назад', callback_data='back_to_my_orders_kb')],
     ]
 )
 
