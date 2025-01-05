@@ -10,7 +10,9 @@ BOT_API = '6408941142:AAH4A5ZDeUHpPrGIJeNJGPCnipORhdrqAi4'
 
 db_password = '1630balalai'
 db_name = 'tg_hardware_store_postgres_db'
-
+db_user = "postgres"
+db_port = "5432"
+db_host = "localhost"
 
 # conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432", database=db_name)
 # with conn.cursor() as curs:

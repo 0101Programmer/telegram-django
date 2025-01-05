@@ -13,13 +13,11 @@ class User(models.Model):
     phone_number = models.CharField(max_length=20)
     date_of_birth = models.DateField()
     orders = models.JSONField(blank=True, null=True)
-    created_at = models.CharField(default=datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"))
-    updated_at = models.CharField(default=datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"))
-    user_data = models.JSONField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Product(models.Model):
-    product_id = models.AutoField(primary_key=True)
     model_name = models.TextField()
     model_name_for_customer = models.TextField()
     description = models.TextField()
