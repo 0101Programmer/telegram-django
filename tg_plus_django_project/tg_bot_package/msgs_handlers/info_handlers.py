@@ -1,9 +1,9 @@
-import tg_plus_django_project.tg_bot_package.keyboards_file as kb_file
 import tg_plus_django_project.tg_bot_package.texts as txt_file
+from tg_plus_django_project.tg_bot_package.keyboards_dir import info_kb
 
 
 async def info(message):
-    await message.answer('Что вас интересует?', reply_markup=kb_file.info_kb)
+    await message.answer('Что вас интересует?', reply_markup=info_kb.info_kb)
 
 
 async def info_address(call):
