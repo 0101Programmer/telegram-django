@@ -3,24 +3,20 @@ from tg_plus_django_project.config import *
 from tabulate import tabulate
 import pandas as pd
 from aiogram.types import ParseMode
+from tg_plus_django_project.sqlalchemy_connection_config.existed_db_models import User, session
 
 
 async def reg_auth_choice(message):
-    conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432", database=db_name)
-    with conn.cursor() as curs:
-        curs.execute('''Select * from tg_plus_django_app_user where tg_username=%s''',
-                     (message.from_user.username,))
-        is_registered = curs.fetchone()
-    conn.close()
+    is_registered = session.query(User).filter(User.tg_username == message.from_user.username).one_or_none()
     if is_registered:
-        if is_registered[7] is not None:
+        if is_registered.orders is not None:
 
             orders_data_df = pd.DataFrame(
                 columns=['Номер заказа', 'Статус', 'Товар', 'Цена (за шт.)', 'Кол-во (шт.)', 'Итого, руб.',
                          'Дата обновления', ])
             loc_idx = 0
 
-            for k, v in is_registered[7].items():
+            for k, v in is_registered.orders.items():
 
                 if v["status"] == 'ordered':
                     status_name_for_client = 'Оформлен'

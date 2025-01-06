@@ -1,6 +1,6 @@
 import datetime
 
-from db_engine import Base
+from tg_plus_django_project.sqlalchemy_connection_config.db_engine import Base, session
 
 Product = Base.classes.tg_plus_django_app_product
 User = Base.classes.tg_plus_django_app_user

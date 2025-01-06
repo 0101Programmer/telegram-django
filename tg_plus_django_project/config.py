@@ -1,7 +1,6 @@
-import psycopg2
-from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import datetime
 import re
+
 import phonenumbers
 from phonenumbers import carrier
 from phonenumbers.phonenumberutil import number_type, NumberParseException
@@ -13,11 +12,6 @@ db_name = 'tg_hardware_store_postgres_db'
 db_user = "postgres"
 db_port = "5432"
 db_host = "localhost"
-
-# conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432", database=db_name)
-# with conn.cursor() as curs:
-#     pass
-# conn.close()
 
 
 def check_email(email):
@@ -31,8 +25,12 @@ def check_email(email):
 
 def check_phone_number(number):
     try:
-        process = carrier._is_mobile(number_type(phonenumbers.parse(number)))
-        return process
+        process = carrier._is_mobile(number_type(phonenumbers.parse(str(number))))
+        if process:
+            p_num = phonenumbers.parse(str(number), None)
+            return phonenumbers.format_number(p_num, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+        else:
+            return False
     except NumberParseException:
         return False
 

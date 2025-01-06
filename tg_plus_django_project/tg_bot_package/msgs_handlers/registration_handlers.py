@@ -1,7 +1,7 @@
 import tg_plus_django_project.tg_bot_package.keyboards_file as kb_file
 from tg_plus_django_project.tg_bot_package.fsm_classes import *
 from tg_plus_django_project.config import *
-
+from tg_plus_django_project.sqlalchemy_connection_config.existed_db_models import User, session
 
 
 async def start_reg(call):
@@ -18,12 +18,7 @@ async def reg_fsm_handler_step_1(message, state):
     else:
         await state.update_data(user_email=message.text)
         data = await state.get_data()
-        conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432",
-                                database=db_name)
-        with conn.cursor() as curs:
-            curs.execute('''Select email from tg_plus_django_app_user where email=%s''', (data['user_email'],))
-            is_existed_email = curs.fetchone()
-        conn.close()
+        is_existed_email = session.query(User).filter(User.email == data['user_email']).one_or_none()
         if not check_email(data['user_email']):
             await message.answer(f"Некорректный email", reply_markup=kb_file.stop_fsm_kb)
         elif is_existed_email:
@@ -75,13 +70,7 @@ async def reg_fsm_handler_step_4(message, state):
     else:
         await state.update_data(user_phone_number=message.text)
         data = await state.get_data()
-        conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432",
-                                database=db_name)
-        with conn.cursor() as curs:
-            curs.execute('''Select phone_number from tg_plus_django_app_user where phone_number=%s''', (data['user_phone_number'],))
-            is_existed_p_number = curs.fetchone()
-        conn.close()
-
+        is_existed_p_number = session.query(User).filter(User.phone_number == data['user_phone_number']).one_or_none()
         if not check_phone_number(data['user_phone_number']):
             await message.answer(f"Некорректный телефонный номер", reply_markup=kb_file.stop_fsm_kb)
         elif is_existed_p_number:
@@ -117,22 +106,18 @@ async def reg_fsm_handler_step_6(message, state):
             await message.answer(f"Извините, но регистрация у нас возможна только с 18 лет",
                                  reply_markup=kb_file.stop_fsm_kb)
         else:
-
-            conn = psycopg2.connect(user="postgres", password=db_password, host="localhost", port="5432",
-                                    database=db_name)
-            with conn.cursor() as curs:
-                curs.execute('''Insert into tg_plus_django_app_user (name, email, password, tg_username, phone_number, date_of_birth, created_at, updated_at) values (%s, %s, %s, %s, %s, %s, %s, %s)''',
-                             (data['user_name'],
-                              data['user_email'],
-                              data['user_password'],
-                              message.from_user.username,
-                              data['user_phone_number'],
-                              data['user_date_of_birth'],
-                              datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"),
-                              datetime.datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S %z | %Z"),
-                              ))
-                conn.commit()
-            conn.close()
-
+            new_user = User(
+                name=data['user_name'],
+                email=data['user_email'],
+                password=data['user_password'],
+                tg_username=message.from_user.username,
+                phone_number=check_phone_number(data['user_phone_number']),
+                date_of_birth=data['user_date_of_birth'],
+                orders=None,
+                created_at=datetime.datetime.now(),
+                updated_at=datetime.datetime.now(),
+            )
+            session.add(new_user)
+            session.commit()
             await message.answer('Спасибо за регистрацию!', reply_markup=kb_file.successful_reg_kb)
             await state.finish()

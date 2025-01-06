@@ -13,7 +13,7 @@ import msgs_handlers.registration_handlers as rh
 from fsm_classes import *
 
 
-# Возврат:
+# Шаблон:
 # --- --- --- --- --- --- --- ---
 
 logging.basicConfig(level=logging.INFO)
