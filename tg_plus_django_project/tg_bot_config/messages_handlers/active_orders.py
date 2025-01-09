@@ -1,12 +1,14 @@
 import pandas as pd
 from aiogram.types import ParseMode
 from tabulate import tabulate
-
 from tg_plus_django_project.sqlalchemy_connection_config.existed_db_models import User, session
-from tg_plus_django_project.tg_bot_package.keyboards_dir import main_kb, successful_reg_kb, my_orders_kb, new_client_kb
+from tg_plus_django_project.tg_bot_config.keyboards.kb_authed_and_registered import authed_and_registered_kb
+from tg_plus_django_project.tg_bot_config.keyboards.kb_main_menu import main_menu_kb
+from tg_plus_django_project.tg_bot_config.keyboards.kb_not_authed_and_registered import not_authed_and_registered_kb
+from tg_plus_django_project.tg_bot_config.keyboards.kb_registration import registration_kb
 
 
-async def reg_auth_choice(message):
+async def active_orders_data(message):
     is_registered = session.query(User).filter(User.tg_username == message.from_user.username).one_or_none()
     if is_registered:
         if is_registered.orders is not None:
@@ -36,13 +38,9 @@ async def reg_auth_choice(message):
                 loc_idx += 1
 
             tabulated_orders_data_df = tabulate(orders_data_df, headers='keys', tablefmt='psql')
-            await message.answer(f'<pre>{tabulated_orders_data_df}</pre>', reply_markup=main_kb.main_kb,
+            await message.answer(f'<pre>{tabulated_orders_data_df}</pre>', reply_markup=main_menu_kb,
                                  parse_mode=ParseMode.HTML)
         else:
-            await message.answer('У вас пока нет ни одного заказа', reply_markup=successful_reg_kb.successful_reg_kb)
+            await message.answer('У вас пока нет ни одного заказа', reply_markup=authed_and_registered_kb)
     else:
-        await message.answer('К сожалению, не смогли найти вас в нашей базе данных', reply_markup=my_orders_kb.my_orders_kb)
-
-
-async def reg_choice(message):
-    await message.answer('Желаете пройти короткую регистрацию?', reply_markup=new_client_kb.new_client_kb)
+        await message.answer('К сожалению, не смогли найти вас в нашей базе данных', reply_markup=not_authed_and_registered_kb)

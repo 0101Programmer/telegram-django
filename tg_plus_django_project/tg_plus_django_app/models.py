@@ -18,9 +18,9 @@ class User(models.Model):
 
 
 class Product(models.Model):
-    model_name = models.TextField()
-    model_name_for_customer = models.TextField()
+    name = models.TextField()
     description = models.TextField()
     price = models.FloatField()
     category = models.CharField()
+    brand = models.CharField()
     images_paths = models.JSONField()

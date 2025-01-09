@@ -1,9 +1,9 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 
-my_orders_kb = ReplyKeyboardMarkup(
+not_authed_and_registered_kb = ReplyKeyboardMarkup(
     keyboard=[
         [
-            KeyboardButton(text='Я новый клиент'),
+            KeyboardButton(text='Зарегистрироваться'),
         ],
         [KeyboardButton(text='На главную')],
     ], resize_keyboard=True

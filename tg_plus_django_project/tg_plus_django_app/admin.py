@@ -5,5 +5,6 @@ from .models import *
 
 try:
     admin.site.register(User)
+    admin.site.register(Product)
 except Exception:
     print("Message from admin.py")

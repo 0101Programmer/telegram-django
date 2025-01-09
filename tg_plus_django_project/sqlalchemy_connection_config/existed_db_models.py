@@ -18,10 +18,10 @@ user_example = User(
 )
 
 product_example = Product(
-    model_name='test_model',
-    model_name_for_customer='Test',
+    name='test_model',
     description='Just test',
     price=1999.99,
     category='test_cat',
+    brand="test_brand",
     images_paths={1: "/test1", 2: "/test2"}
 )
