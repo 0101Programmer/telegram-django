@@ -29,12 +29,13 @@ class ConsolesPageViewById(View):
         return render(request, self.template_name, {"user_id": user_id, })
 
 
-
-class ConsoleModelPageView(TemplateView):
+class ConsoleModelPageView(View):
     template_name = 'cat_pages/cons_model_page.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+    def get(self, request, console_model):
+        product_filter = Product.objects.values().get(name=console_model)
+
+        return render(request, self.template_name, {'product_filter': product_filter})
 
 
 class ConsoleModelPageViewById(View):
@@ -81,15 +82,15 @@ class ConsoleModelPageViewById(View):
                                                                               2), }})
             else:
                 User.objects.filter(id=user_id).update(orders={f'{1}': {"model_name": console_model,
-                                                                                   "model_name_for_client":
-                                                                                       product_filter[
-                                                                                           "model_name_for_customer"],
-                                                                                   "product_amount": product_amount,
-                                                                                   "product_price": product_filter[
-                                                                                       "price"],
-                                                                                   "updated_at": datetime.datetime.now().astimezone().strftime(
-                                                                                       "%Y-%m-%d | %H:%M:%S %z | %Z"),
-                                                                                   "status": "ordered", "total": round(
+                                                                        "model_name_for_client":
+                                                                            product_filter[
+                                                                                "model_name_for_customer"],
+                                                                        "product_amount": product_amount,
+                                                                        "product_price": product_filter[
+                                                                            "price"],
+                                                                        "updated_at": datetime.datetime.now().astimezone().strftime(
+                                                                            "%Y-%m-%d | %H:%M:%S %z | %Z"),
+                                                                        "status": "ordered", "total": round(
                         product_amount * product_filter["price"], 2), }})
 
             return HttpResponseRedirect(f'/console_page/{user_id}/{console_model}')

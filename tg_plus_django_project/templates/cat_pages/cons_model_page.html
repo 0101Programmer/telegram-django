@@ -31,7 +31,7 @@
             </li>
             {% endif %}
             <li class="nav-item active">
-                <a class="nav-link active" href="#">{{ product_filter.model_name_for_customer }}</a>
+                <a class="nav-link active" href="#">{{ product_filter.name }}</a>
             </li>
         </ul>
     </div>
@@ -40,7 +40,7 @@
 
 {% block content %}
 
-<h1>{{ product_filter.model_name_for_customer }}</h1>
+<h1>{{ product_filter.name }}</h1>
 <p>Цена: {{ product_filter.price }} руб.</p>
 <p>Описание: {{ product_filter.description }}</p>
 <p><img src="{{ product_filter.images_paths.1 }}" width="500"
