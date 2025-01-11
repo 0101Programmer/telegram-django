@@ -7,6 +7,12 @@ tv_samsung_model_choice_kb = InlineKeyboardMarkup(
     ]
 )
 
+tv_samsung_model_choice_kb_for_ordering_fsm = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text='QE65Q70DAU', callback_data='QE65Q70DAU')],
+    ]
+)
+
 back_to_tv_samsung_model_choice_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text='К выбору модели', callback_data='samsung_tv')],

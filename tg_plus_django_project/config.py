@@ -78,16 +78,11 @@ def is_valid_card_date(date_str):
     else:
         return False
 
-
 def is_valid_card_num(num_str):
-    valid_lengths = {13, 16, 18, 19}
-    digits = num_str.split()
-
-    if len(digits) not in valid_lengths:
+    card_number_pattern = "[0-9]{13,19}"
+    if not num_str.isnumeric():
         return False
-
-    for digit in digits:
-        if not digit.isdigit():
-            return False
-
-    return True
+    if re.match(card_number_pattern, str(num_str)) and len(num_str) <= 19:
+        return True
+    else:
+        return False
