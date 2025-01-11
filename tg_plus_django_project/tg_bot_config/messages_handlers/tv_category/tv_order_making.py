@@ -182,7 +182,7 @@ async def ordering_fsm_handler_step_8(message, state):
                 user_data.updated_at = datetime.datetime.now()
                 session.add(user_data)
                 session.commit()
-                await message.answer('Спасибо за ваш заказ')
+                await message.answer('Спасибо за ваш заказ', reply_markup=main_menu_kb)
                 await state.finish()
         else:
             if message.text != 'Да' and message.text != 'Нет':
@@ -223,7 +223,7 @@ async def ordering_fsm_handler_step_8(message, state):
                     user_data.updated_at = datetime.datetime.now()
                     session.add(user_data)
                     session.commit()
-                await message.answer('Спасибо за ваш заказ')
+                await message.answer('Спасибо за ваш заказ', reply_markup=main_menu_kb)
                 await state.finish()
 
             elif message.text == 'Нет':
@@ -258,5 +258,5 @@ async def ordering_fsm_handler_step_8(message, state):
                     user_data.updated_at = datetime.datetime.now()
                     session.add(user_data)
                     session.commit()
-                await message.answer('Спасибо за ваш заказ')
+                await message.answer('Спасибо за ваш заказ', reply_markup=main_menu_kb)
                 await state.finish()
