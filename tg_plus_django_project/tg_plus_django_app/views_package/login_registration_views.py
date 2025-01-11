@@ -39,8 +39,7 @@ class LogFormView(View):
                 return render(request, 'error.html', {'error': error})
             else:
                 User.objects.filter(email=email).update(
-                                                               updated_at=datetime.datetime.now().astimezone().strftime(
-                                                                   "%Y-%m-%d | %H:%M:%S %z | %Z")
+                                                               updated_at=datetime.datetime.now()
                 )
                 user_filter = User.objects.values().filter(email=email)
                 user_data = ''

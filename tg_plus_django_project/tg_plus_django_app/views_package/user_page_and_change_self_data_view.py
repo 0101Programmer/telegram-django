@@ -29,8 +29,7 @@ class UserPageView(View):
 
     def post(self, request, user_id):
         User.objects.filter(id=user_id).update(
-            updated_at=datetime.datetime.now().astimezone().strftime(
-                "%Y-%m-%d | %H:%M:%S %z | %Z")
+            updated_at=datetime.datetime.now()
         )
 
         del request.session['id']
@@ -66,7 +65,7 @@ class ChangeDataView(View):
             user_data_to_change_name = 'Номер телефона'
 
         form = self.form_class(initial=self.initial)
-        active_user_filter = User.objects.values().filter(is_active__exact=True)
+        active_user_filter = User.objects.values().filter(id=user_id)
         active_user_data_to_change = ''
 
         for _ in active_user_filter:
@@ -94,8 +93,7 @@ class ChangeDataView(View):
                     return render(request, 'error.html', {'error': error})
                 else:
                     User.objects.filter(id=user_id).update(email=variable,
-                                                           updated_at=datetime.datetime.now().astimezone().strftime(
-                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                                                           updated_at=datetime.datetime.now())
                     return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'password':
@@ -110,8 +108,7 @@ class ChangeDataView(View):
                     return render(request, 'error.html', {'error': error})
                 else:
                     User.objects.filter(id=user_id).update(password=variable,
-                                                           updated_at=datetime.datetime.now().astimezone().strftime(
-                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                                                           updated_at=datetime.datetime.now())
                     return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'tg_username':
@@ -121,8 +118,7 @@ class ChangeDataView(View):
                     return render(request, 'error.html', {'error': error})
                 else:
                     User.objects.filter(id=user_id).update(tg_username=variable,
-                                                           updated_at=datetime.datetime.now().astimezone().strftime(
-                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                                                           updated_at=datetime.datetime.now())
                     return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'phone_number':
@@ -135,14 +131,12 @@ class ChangeDataView(View):
                     return render(request, 'error.html', {'error': error})
                 else:
                     User.objects.filter(id=user_id).update(phone_number=variable,
-                                                           updated_at=datetime.datetime.now().astimezone().strftime(
-                                                               "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                                                           updated_at=datetime.datetime.now())
                     return HttpResponseRedirect(f'/user_page/{user_id}')
 
             elif user_data_to_change == 'name':
                 User.objects.filter(id=user_id).update(name=variable,
-                                                       updated_at=datetime.datetime.now().astimezone().strftime(
-                                                           "%Y-%m-%d | %H:%M:%S %z | %Z"))
+                                                       updated_at=datetime.datetime.now())
                 return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})

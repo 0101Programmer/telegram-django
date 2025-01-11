@@ -13,7 +13,7 @@ async def active_orders_data(message):
     if is_registered:
         if is_registered.orders is not None:
             orders_data_df = pd.DataFrame(
-                columns=['Номер заказа', 'Статус', 'Товар', 'Кол-во (шт.)', 'Итого, руб.',
+                columns=['Заказ №', 'Статус', 'Товар', 'Кол-во (ед.)', 'Итого, руб.',
                          'Дата обновления', ])
             loc_idx = 0
             for k, v in is_registered.orders.items():

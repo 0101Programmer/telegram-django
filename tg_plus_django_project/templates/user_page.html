@@ -87,8 +87,7 @@
             <th>Заказ №</th>
             <th>Статус</th>
             <th>Товар</th>
-            <th>Цена (за шт.)</th>
-            <th>Кол-во (шт.)</th>
+            <th>Кол-во (ед.)</th>
             <th>Итого, руб.</th>
             <th>Дата обновления</th>
         </tr>
@@ -102,20 +101,19 @@
             {% elif val.status == "canceled" %}
             <td>Отменён</td>
             {% elif val.status == "confirmed" %}
-            <td>Оплачен, ожидается доставка</td>
+            <td>Оплачен</td>
             {% else %}
             <td>None</td>
             {% endif %}
-            <td>{{ val.model_name_for_client }}</td>
-            <td>{{ val.product_price }}</td>
+            <td>{{ val.product_name }}</td>
             <td>{{ val.product_amount }}</td>
-            <td>{{ val.total }}</td>
+            <td>{{ val.product_total }}</td>
             {% if val.status == "ordered" %}
-            <td colspan="2">{{ val.updated_at|slice:":18" }}</td>
+            <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
             {% elif val.status == "canceled" %}
-            <td colspan="2">{{ val.updated_at|slice:":18" }}</td>
+            <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
             {% elif val.status == "confirmed" %}
-            <td colspan="2">{{ val.updated_at|slice:":18" }}</td>
+            <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
             {% else %}
             <td>None</td>
             {% endif %}
