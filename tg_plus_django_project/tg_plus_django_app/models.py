@@ -23,4 +23,5 @@ class Product(models.Model):
     price = models.FloatField()
     category = models.CharField()
     brand = models.CharField()
+    ratings = models.JSONField(blank=True, null=True)
     images_paths = models.JSONField()

@@ -101,7 +101,7 @@
             {% elif val.status == "canceled" %}
             <td>Отменён</td>
             {% elif val.status == "confirmed" %}
-            <td>Оплачен</td>
+            <td>Оплачен, <a href="rate_my_order/{{ key }}">оценить</a></td>
             {% else %}
             <td>None</td>
             {% endif %}

@@ -5,6 +5,7 @@ from .views_package.confirm_cancel_change_order_views import *
 from .views_package.consoles_and_console_model_page_views import *
 from .views_package.home_view import *
 from .views_package.login_registration_views import *
+from .views_package.rate_order_view import RateOrderView
 from .views_package.user_page_and_change_self_data_view import *
 
 urlpatterns = [
@@ -23,6 +24,9 @@ urlpatterns = [
     path('user_page/<int:user_id>/change_my_order/<str:order_id_to_change>/', ChangeOrderView.as_view(), name='change_order_page'),
     path('cancel_my_order/<int:user_id>/<str:order_id_to_change>', CancelOrderView.as_view(), name='cancel_order_page'),
     path('user_page/<int:user_id>/confirm_my_order/<str:order_id_to_change>', ConfirmOrderView.as_view(), name='confirm_order_page'),
+
+    path('user_page/<int:user_id>/rate_my_order/<str:order_id_to_rate>', RateOrderView.as_view(),
+         name='rate_order_page'),
 
     path('catalog_page/', CatalogPageView.as_view(), name='catalog_page'),
     path('catalog_page/<int:user_id>/', CatalogPageViewById.as_view(), name='catalog_page_by_id'),

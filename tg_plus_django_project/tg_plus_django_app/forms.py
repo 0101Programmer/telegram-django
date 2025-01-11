@@ -30,3 +30,8 @@ class PaymentForm(forms.Form):
     card_num = forms.CharField(label="Номер карты", required=True)
     card_date = forms.CharField(label="Срок действия", required=True)
     card_cvc = forms.IntegerField(label="Трёхзначный код с обратной стороны", required=True)
+
+
+class RatingForm(forms.Form):
+    rating = forms.IntegerField(label="Оценка", min_value=1, max_value=5, required=True)
+    review = forms.CharField(widget=forms.Textarea, min_length=100, max_length=500, label="Отзыв", required=True)
