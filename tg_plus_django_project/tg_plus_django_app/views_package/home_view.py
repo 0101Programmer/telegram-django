@@ -8,7 +8,8 @@ class HomePage(TemplateView):
     template_name = 'home.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        all_products_data = Product.objects.all()
+        return render(request, self.template_name, {"all_products_data": all_products_data})
 
 
 class HomePageById(View):
@@ -22,4 +23,6 @@ class HomePageById(View):
         except KeyError:
             error = 'Доступ запрещён'
             return render(request, 'error.html', {'error': error})
-        return render(request, self.template_name, {"user_id": user_id})
+
+        all_products_data = Product.objects.all()
+        return render(request, self.template_name, {"user_id": user_id, "all_products_data": all_products_data})

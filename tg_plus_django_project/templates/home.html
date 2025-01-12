@@ -39,14 +39,19 @@
 
 {% block content %}
 <h1>Добро пожаловать в наш магазин!</h1>
-<p>Популярное сейчас:</p>
+<p>Популярные категории:</p>
+
 {% if user_id %}
-<p><a href="/console_page/{{ user_id }}/PlayStation5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
-height="300" alt="img"></a></p>
-<p>PlayStation 5</p>
+    {% for product in all_products_data %}
+        <p><a href="/category_page/{{ user_id }}/{{ product.category.0 }}"><img src="{{ product.images_paths.1 }}" width="500"
+        height="300" alt="img"></a></p>
+        <p>{{ product.category.1 }}</p>
+    {% endfor %}
 {% else %}
-<p><a href="/console_page/PlayStation5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
-height="300" alt="img"></a></p>
-<p>PlayStation 5</p>
+    {% for product in all_products_data %}
+        <p><a href="/category_page/{{ product.category.0 }}"><img src="{{ product.images_paths.1 }}" width="500"
+        height="300" alt="img"></a></p>
+        <p>{{ product.category.1 }}</p>
+    {% endfor %}
 {% endif %}
 {% endblock %}

@@ -13,19 +13,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/{{ user_id }}">Главная</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/catalog_page/{{ user_id }}">Каталог</a>
-            </li>
             {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/catalog_page">Каталог</a>
-            </li>
             {% endif %}
-            <li class="nav-item active">
-                <a class="nav-link active" href="#">Игровые консоли</a>
+            <li class="nav-item">
+                {% for product in category_filter %}
+                    <a class="nav-link active" href="#">{{ product.category.1 }}</a>
+                {% endfor %}
             </li>
         </ul>
     </div>
@@ -33,10 +29,23 @@
 {% endblock %}
 
 {% block content %}
-<h1>В наличии следующие игровые консоли:</h1>
-<br>
-<p><a href="PlayStation5"><img src="/static/cat_pics/consoles/ps5.png" width="500"
-height="300" alt="img"></a></p>
-<p>PlayStation 5</p>
+
+{% for product in category_filter %}
+    <h1>Товары из категории "{{ product.category.1 }}"</h1>
+{% endfor %}
+
+{% if user_id %}
+    {% for product in category_filter %}
+        <p><a href="{{ product.category.0 }}/product_page/{{ product.id }}"><img src="{{ product.images_paths.1 }}" width="500"
+                            height="300" alt="img"></a></p>
+        <p>{{ product.name.1 }}</p>
+    {% endfor %}
+{% else %}
+    {% for product in category_filter %}
+        <p><a href="{{ product.category.0 }}/product_page/{{ product.id }}"><img src="{{ product.images_paths.1 }}" width="500"
+                            height="300" alt="img"></a></p>
+        <p>{{ product.name.1 }}</p>
+    {% endfor %}
+{% endif %}
 
 {% endblock %}

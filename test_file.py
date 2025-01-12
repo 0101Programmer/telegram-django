@@ -1,3 +1,3 @@
-string = "2025-11"
-new = string.replace("-", "\-")
-print(string.replace("1", "2"))
+wow = {'game_consoles': 'Игровые консоли'}
+
+a = ([k for k, v in wow.items()])
