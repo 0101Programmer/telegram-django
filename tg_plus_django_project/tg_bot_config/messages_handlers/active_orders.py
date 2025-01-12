@@ -17,18 +17,12 @@ async def active_orders_data(message):
                          'Дата обновления', ])
             loc_idx = 0
             for k, v in is_registered.orders.items():
-                if v["status"] == 'ordered':
-                    status = 'Оформлен'
-                elif v["status"] == 'canceled':
-                    status = 'Отменён'
-                else:
-                    status = 'Оплачен'
                 new_row = [k,
-                           status,
-                           f'{v["product_name"]}',
-                           f'{v["product_amount"]}',
-                           f'{v["product_total"]}',
-                           f'{v["updated_at"][:16]}']
+                           v["status"][1],
+                           v["product_name"],
+                           v["product_amount"],
+                           v["product_total"],
+                           v["updated_at"][:16]]
                 orders_data_df.loc[loc_idx] = new_row
                 loc_idx += 1
             tabulated_orders_data_df = tabulate(orders_data_df, headers='keys', tablefmt='psql')
