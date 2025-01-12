@@ -39,6 +39,10 @@
         <p><img src="{{ product.images_paths.1 }}" width="500"
                             height="300" alt="img"></p>
         <p>{{ product.description }}</p>
+        {% if product.ratings %}
+            <p>Рейтинг товара: {{ product.ratings.total_rating.average_rating }}</p>
+            <p>На основании {{ product.ratings.total_rating.total_reviews }} оценок</p>
+        {% endif %}
     {% endfor %}
 
 <form method="post">
@@ -55,8 +59,31 @@
         <p><img src="{{ product.images_paths.1 }}" width="500"
                             height="300" alt="img"></p>
         <p>{{ product.description }}</p>
+        {% if product.ratings %}
+            <p>Рейтинг товара: {{ product.ratings.total_rating.average_rating }}</p>
+            <p>На основании {{ product.ratings.total_rating.total_reviews }} оценок</p>
+        {% endif %}
     {% endfor %}
     <a href="/reg_and_auth_page">Войти или зарегистрироваться для оформления заказа</a>
 {% endif %}
+
+<br>
+{% for product in product_filter %}
+    {% if product.ratings %}
+        <p>Отзывы пользователей</p>
+        {% for k, v in product.ratings.reviews.items %}
+            <div>
+                {{ v.created_by }}
+                <br>
+                {{ v.created_at }}
+                <br>
+                Оценка: {{ v.rating }}
+                <br>
+               Отзыв: <p style="word-break: break-all;">{{ v.review }}</p>
+            </div>
+            <br>
+        {% endfor %}
+    {% endif %}
+{% endfor %}
 
 {% endblock %}

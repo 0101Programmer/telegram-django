@@ -96,13 +96,17 @@
         <tr>
             <td>{{ key }}</td>
             {% if val.status.0 == "ordered" %}
-            <td>{{ val.status.1 }}, <a href="confirm_my_order/{{ key }}">оплатить</a> или <a href="change_my_order/{{ key }}">редактировать</a></td>
+                <td>{{ val.status.1 }}, <a href="confirm_my_order/{{ key }}">оплатить</a> или <a href="change_my_order/{{ key }}">редактировать</a></td>
             {% elif val.status.0 == "canceled" %}
-            <td>{{ val.status.1 }}</td>
+                <td>{{ val.status.1 }}</td>
             {% elif val.status.0 == "confirmed" %}
-            <td>{{ val.status.1 }}, <a href="rate_my_order/{{ key }}">оценить</a></td>
+                {% if not val.is_rated %}
+                    <td>{{ val.status.1 }}, <a href="rate_my_order/{{ key }}">оценить</a></td>
+                {% else %}
+                    <td>{{ val.status.1 }}, благодарим за ваш отзыв</td>
+                {% endif %}
             {% else %}
-            <td>None</td>
+                <td>None</td>
             {% endif %}
             <td>{{ val.product_name }}</td>
             <td>{{ val.product_amount }}</td>

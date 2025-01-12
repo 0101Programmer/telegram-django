@@ -33,5 +33,12 @@ class PaymentForm(forms.Form):
 
 
 class RatingForm(forms.Form):
-    rating = forms.IntegerField(label="Оценка", min_value=1, max_value=5, required=True)
+    CHOICES = [
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
+    ]
+    rating = forms.ChoiceField(label="Оценка", choices=CHOICES, required=True)
     review = forms.CharField(widget=forms.Textarea, min_length=100, max_length=500, label="Отзыв", required=True)

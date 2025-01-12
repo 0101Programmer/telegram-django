@@ -83,7 +83,8 @@ class ChangeDataView(View):
                     return HttpResponseRedirect(f'/user_page/{user_id}')
             elif data_to_change == 'password':
                 if not password_validate(variable):
-                    error = 'Пожалуйста, придумайте надёжный пароль. Требования: не менее восьми символов, наличие спецсимволов, а также больших и строчных букв. (Пример: -Secr3t.)'
+                    error = ('Пожалуйста, придумайте надёжный пароль. Требования: не менее восьми символов, '
+                             'наличие спецсимволов, а также больших и строчных букв. (Пример: -Secr3t.)')
                     return render(request, 'error.html', {'error': error})
                 elif variable == '-Secr3t.':
                     error = 'Пожалуйста, не используйте пароль из примера.'

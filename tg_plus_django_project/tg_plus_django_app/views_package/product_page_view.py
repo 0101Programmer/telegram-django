@@ -50,24 +50,26 @@ class ProductPageViewById(View):
                                           "product_amount": product_amount,
                                           "product_id": product_id,
                                           "product_total":
-                                              list(product.price for product in product_filter)[0] * product_amount,
+                                              round(list(product.price for product in product_filter)[0]
+                                                    * product_amount, 2),
                                           "status": ["ordered", "Оформлен"],
                                           "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
-                                          "card_data": None}}
-                user_filter.save(update_fields=["orders"])
+                                          "card_data": None,
+                                          "is_rated": False}}
+                user_filter.save(update_fields=["orders", "updated_at"])
                 return redirect(request.path)
             else:
                 now = datetime.datetime.now(tzlocal.get_localzone())
-                user_filter.orders = (user_filter.orders |
-                                      {int(max(user_filter.orders, key=int)) + 1:
-                                           {"product_name": list(product.name[1] for product in product_filter)[0],
-                                            "product_amount": product_amount,
-                                            "product_id": product_id,
-                                            "product_total":
-                                                list(product.price for product in product_filter)[0] * product_amount,
-                                            "status": ["ordered", "Оформлен"],
-                                            "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
-                                            "card_data": None}})
-                user_filter.save(update_fields=["orders"])
+                user_filter.orders[(int(max(user_filter.orders, key=int)) + 1)] = {
+                    "product_name": list(product.name[1] for product in product_filter)[0],
+                    "product_amount": product_amount,
+                    "product_id": product_id,
+                    "product_total":
+                        round(list(product.price for product in product_filter)[0] * product_amount, 2),
+                    "status": ["ordered", "Оформлен"],
+                    "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
+                    "card_data": None,
+                    "is_rated": False}
+                user_filter.save(update_fields=["orders", "updated_at"])
                 return redirect(request.path)
         return render(request, self.template_name, {'form': form})
