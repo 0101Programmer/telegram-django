@@ -13,25 +13,15 @@
             <li class="nav-item">
                 <a class="nav-link" href="/{{ user_id }}">Главная</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/catalog_page/{{ user_id }}">Каталог</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/console_page/{{ user_id }}">Игровые консоли</a>
-            </li>
             {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="/">Главная</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/catalog_page">Каталог</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/console_page">Игровые консоли</a>
-            </li>
             {% endif %}
-            <li class="nav-item active">
-                <a class="nav-link active" href="#">{{ product_filter.name }}</a>
+            <li class="nav-item">
+                {% for product in product_filter %}
+                    <a class="nav-link active" href="#">{{ product.name.1 }}</a>
+                {% endfor %}
             </li>
         </ul>
     </div>
@@ -40,13 +30,16 @@
 
 {% block content %}
 
-<h1>{{ product_filter.name }}</h1>
-<p>Цена: {{ product_filter.price }} руб.</p>
-<p>Описание: {{ product_filter.description }}</p>
-<p><img src="{{ product_filter.images_paths.1 }}" width="500"
-height="300" alt="img"></p>
+{% for product in product_filter %}
+    <h1>{{ product.name.1 }}</h1>
+{% endfor %}
 
 {% if user_id %}
+    {% for product in product_filter %}
+        <p><img src="{{ product.images_paths.1 }}" width="500"
+                            height="300" alt="img"></p>
+        <p>{{ product.description }}</p>
+    {% endfor %}
 
 <form method="post">
     {% csrf_token %}
@@ -58,7 +51,12 @@ height="300" alt="img"></p>
 </form>
 
 {% else %}
-<a href="reg_and_auth_page">Войти или зарегистрироваться для оформления заказа</a>
+    {% for product in product_filter %}
+        <p><img src="{{ product.images_paths.1 }}" width="500"
+                            height="300" alt="img"></p>
+        <p>{{ product.description }}</p>
+    {% endfor %}
+    <a href="/reg_and_auth_page">Войти или зарегистрироваться для оформления заказа</a>
 {% endif %}
 
 {% endblock %}

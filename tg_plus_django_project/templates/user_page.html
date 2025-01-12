@@ -26,7 +26,6 @@
 
 
 <h1>Личный кабинет</h1>
-
 <table>
     <caption>Персональная информация</caption>
     <thead>
@@ -41,18 +40,18 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{ active_user_data.name }}</td>
-            <td>{{ active_user_data.email }}</td>
+            <td>{{ user_data.name }}</td>
+            <td>{{ user_data.email }}</td>
             <td>
                 <a href="password">Посмотреть или изменить пароль</a>
             </td>
-            {% if active_user_data.tg_username %}
-            <td>{{ active_user_data.tg_username }}</td>
+            {% if user_data.tg_username %}
+            <td>{{ user_data.tg_username }}</td>
             {% else %}
             <td></td>
             {% endif %}
-            <td>{{ active_user_data.phone_number }}</td>
-            <td>{{ active_user_data.date_of_birth }}</td>
+            <td>{{ user_data.phone_number }}</td>
+            <td>{{ user_data.date_of_birth }}</td>
         </tr>
     </tbody>
 </table>

@@ -13,44 +13,31 @@ class LogFormView(View):
     initial = {'key': 'value'}
     template_name = 'login.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = self.form_class(request.POST)
 
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-
-            is_email_existed = User.objects.filter(email__exact=email)
-
+            is_email_existed = User.objects.get(email=email)
             if not check_email(email):
                 error = 'Пожалуйста, укажите email в формате example@mail.ru'
                 return render(request, 'error.html', {'error': error})
-
             elif not is_email_existed:
                 error = 'Пользователя с указанным email не существует'
                 return render(request, 'error.html', {'error': error})
-
             elif password != User.objects.get(email=email).password:
                 error = 'Пароль не подходит'
                 return render(request, 'error.html', {'error': error})
             else:
-                User.objects.filter(email=email).update(
-                                                               updated_at=datetime.datetime.now()
-                )
-                user_filter = User.objects.values().filter(email=email)
-                user_data = ''
-
-                for _ in user_filter:
-                    user_data = _
-
-                request.session['id'] = user_data["id"]
-
-                return HttpResponseRedirect(f'/user_page/{user_data["id"]}')
-
+                user_data = User.objects.get(email=email)
+                request.session['id'] = user_data.id
+                user_data.save()
+                return HttpResponseRedirect(f'/user_page/{user_data.id}')
         return render(request, self.template_name, {'form': form})
 
 
