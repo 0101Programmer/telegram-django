@@ -48,6 +48,7 @@ class ProductPageViewById(View):
                 now = datetime.datetime.now(tzlocal.get_localzone())
                 user_filter.orders = {1: {"product_name": list(product.name[1] for product in product_filter)[0],
                                           "product_amount": product_amount,
+                                          "product_id": product_id,
                                           "product_total":
                                               list(product.price for product in product_filter)[0] * product_amount,
                                           "status": ["ordered", "Оформлен"],
@@ -61,6 +62,7 @@ class ProductPageViewById(View):
                                       {int(max(user_filter.orders, key=int)) + 1:
                                            {"product_name": list(product.name[1] for product in product_filter)[0],
                                             "product_amount": product_amount,
+                                            "product_id": product_id,
                                             "product_total":
                                                 list(product.price for product in product_filter)[0] * product_amount,
                                             "status": ["ordered", "Оформлен"],

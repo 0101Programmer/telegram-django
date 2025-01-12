@@ -25,22 +25,15 @@
 
 {% block content %}
 
-<h1>Изменение данных заказа № {{ order_id_to_change }}</h1>
+<h1>Изменение данных заказа № {{ order_id }}</h1>
 
 <dl>
     <dt>Статус</dt>
-
-    {% if active_user_order_to_change.status == "ordered" %}
-    <dd>Оформлен и ожидает оплаты</dd>
-    {% else %}
-    <dd>----</dd>
-    {% endif %}
-
+    <dd>{{ order_filter.status.1 }} и ожидает оплаты</dd>
     <dt>Товар</dt>
-    <dd>{{ active_user_order_to_change.model_name_for_client }}</dd>
-
+    <dd>{{ order_filter.product_name }}</dd>
     <dt>Кол-во (шт.)</dt>
-    <dd>{{ active_user_order_to_change.product_amount }}</dd>
+    <dd>{{ order_filter.product_amount }}</dd>
 </dl>
 
 <form method="post">
@@ -53,6 +46,6 @@
 </form>
 
 <br>
-<a href="/cancel_my_order/{{ user_id }}/{{ order_id_to_change }}" class="btn btn-danger">Отменить</a>
+<a href="/cancel_my_order/{{ user_id }}/{{ order_id }}" class="btn btn-danger">Отменить</a>
 
 {% endblock %}

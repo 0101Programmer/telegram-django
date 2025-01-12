@@ -26,7 +26,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css_styles/reg_log_forms.css' %}">
 
-<h1>Заказ № {{ order_id_to_change }}</h1>
+<h1>Заказ № {{ order_id }}</h1>
 <form method="post">
     {% csrf_token %}
     <div class="form-group">
@@ -41,7 +41,7 @@
         {{ form.card_cvc.label }}
         {{ form.card_cvc }}
     </div>
-    <button type="submit" class="btn btn-primary">Оплатить {{ active_user_order_to_change.total }} руб.</button>
+    <button type="submit" class="btn btn-primary">Оплатить {{ order_filter.product_total }} руб.</button>
 </form>
 
 {% endblock %}

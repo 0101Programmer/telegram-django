@@ -36,12 +36,12 @@ urlpatterns = [
     # < --- --- --- --- --- --- >
 
     # Изменение заказа, его статусов, оценка заказа
-    path('user_page/<int:user_id>/change_my_order/<str:order_id_to_change>/', ChangeOrderView.as_view(),
+    path('user_page/<int:user_id>/change_my_order/<str:order_id>/', ChangeOrderView.as_view(),
          name='change_order_page'),
-    path('cancel_my_order/<int:user_id>/<str:order_id_to_change>', CancelOrderView.as_view(), name='cancel_order_page'),
-    path('user_page/<int:user_id>/confirm_my_order/<str:order_id_to_change>', ConfirmOrderView.as_view(),
+    path('cancel_my_order/<int:user_id>/<str:order_id>', CancelOrderView.as_view(), name='cancel_order_page'),
+    path('user_page/<int:user_id>/confirm_my_order/<str:order_id>', ConfirmOrderView.as_view(),
          name='confirm_order_page'),
-    path('user_page/<int:user_id>/rate_my_order/<str:order_id_to_rate>', RateOrderView.as_view(),
+    path('user_page/<int:user_id>/rate_my_order/<str:order_id>', RateOrderView.as_view(),
          name='rate_order_page'),
     # < --- --- --- --- --- --- >
 

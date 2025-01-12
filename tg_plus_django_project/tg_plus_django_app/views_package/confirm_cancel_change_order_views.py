@@ -1,3 +1,4 @@
+import tzlocal
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
@@ -11,7 +12,7 @@ class ConfirmOrderView(View):
     initial = {'key': 'value'}
     template_name = 'confirm_order_page.html'
 
-    def get(self, request, user_id, order_id_to_change):
+    def get(self, request, user_id, order_id):
 
         try:
             if user_id != request.session['id']:
@@ -22,18 +23,16 @@ class ConfirmOrderView(View):
             return render(request, 'error.html', {'error': error})
 
         form = self.form_class(initial=self.initial)
-        active_user_filter = User.objects.values().filter(id=user_id)
-        active_user_order_to_change = ''
+        user_filter = User.objects.get(id=user_id)
+        order_filter = user_filter.orders[f'{order_id}']
 
-        for _ in active_user_filter:
-            active_user_order_to_change = _['orders'][f'{order_id_to_change}']
+        return render(request, self.template_name, {'user_filter': user_filter,
+                                                    'order_filter': order_filter,
+                                                    'order_id': order_id, 'form': form, 'user_id': user_id, })
 
-        return render(request, self.template_name, {'active_user_filter': active_user_filter,
-                                                    'active_user_order_to_change': active_user_order_to_change,
-                                                    'order_id_to_change': order_id_to_change, 'form': form, 'user_id': user_id, })
-
-    def post(self, request, user_id, order_id_to_change):
+    def post(self, request, user_id, order_id):
         form = self.form_class(request.POST)
+        user_filter = User.objects.get(id=user_id)
 
         if form.is_valid():
             card_num = str(form.cleaned_data['card_num'])
@@ -41,54 +40,21 @@ class ConfirmOrderView(View):
             card_cvc = form.cleaned_data['card_cvc']
 
             if not is_valid_card_num(card_num):
-                error = 'Номер дебетовой банковской карты может состоять из 13, 16, 18 или 19 цифр. Укажите его в формате "1 2 22 66 5 10 5..."'
+                error = 'Номер дебетовой банковской карты может состоять из 13, 16, 18 или 19 цифр. Укажите его без пробелов'
                 return render(request, 'error.html', {'error': error})
-
             elif len(str(card_cvc)) != 3:
                 error = 'Некорректный трёхзначный код'
                 return render(request, 'error.html', {'error': error})
-
             elif not is_valid_card_date(card_date):
                 error = 'Пожалуйста, укажите срок действия карты в формате ГГГГ-ММ (карта должна быть активной)'
                 return render(request, 'error.html', {'error': error})
-
             else:
-                user_filter = User.objects.values().get(id=user_id)
-
-                User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
-                                                                         {f'{order_id_to_change}': {"model_name":
-                                                                                                        user_filter[
-                                                                                                            'orders'][
-                                                                                                            f'{order_id_to_change}'][
-                                                                                                            'model_name'],
-                                                                                                    "model_name_for_client":
-                                                                                                        user_filter[
-                                                                                                            'orders'][
-                                                                                                            f'{order_id_to_change}'][
-                                                                                                            'model_name_for_client'],
-                                                                                                    "product_amount":
-                                                                                                        user_filter[
-                                                                                                            'orders'][
-                                                                                                            f'{order_id_to_change}'][
-                                                                                                            'product_amount'],
-                                                                                                    "product_price":
-                                                                                                        user_filter[
-                                                                                                            'orders'][
-                                                                                                            f'{order_id_to_change}'][
-                                                                                                            'product_price'],
-                                                                                                    "updated_at": datetime.datetime.now().astimezone().strftime(
-                                                                                                        "%Y-%m-%d | %H:%M:%S %z | %Z"),
-                                                                                                    "status": "confirmed",
-                                                                                                    "total":
-                                                                                                        user_filter[
-                                                                                                            'orders'][
-                                                                                                            f'{order_id_to_change}'][
-                                                                                                            'total'],
-                                                                                                    "paid_by": {
-                                                                                                        "card_num": card_num,
-                                                                                                        "card_date": card_date,
-                                                                                                        "card_cvc": card_cvc}, }})
-
+                card_data = {"card_number": card_num, "card_date": card_date, "card_cvc": card_cvc}
+                now = datetime.datetime.now(tzlocal.get_localzone())
+                user_filter.orders[f"{order_id}"]["status"] = ["confirmed", "Оплачен"]
+                user_filter.orders[f"{order_id}"]["updated_at"] = now.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+                user_filter.orders[f"{order_id}"]["card_data"] = card_data
+                user_filter.save(update_fields=["orders", "updated_at"])
                 return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})
@@ -97,8 +63,7 @@ class ConfirmOrderView(View):
 class CancelOrderView(View):
     template_name = 'cancel_order_page.html'
 
-    def get(self, request, user_id, order_id_to_change):
-
+    def get(self, request, user_id, order_id):
         try:
             if user_id != request.session['id']:
                 error = 'Доступ запрещён'
@@ -106,33 +71,11 @@ class CancelOrderView(View):
         except KeyError:
             error = 'Доступ запрещён'
             return render(request, 'error.html', {'error': error})
-
-        user_filter = User.objects.values().get(is_active=True)
-
-        User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
-                                                                 {f'{order_id_to_change}': {"model_name":
-                                                                                                user_filter['orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'model_name'],
-                                                                                            "model_name_for_client":
-                                                                                                user_filter['orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'model_name_for_client'],
-                                                                                            "product_amount":
-                                                                                                user_filter['orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'product_amount'],
-                                                                                            "product_price":
-                                                                                                user_filter['orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'product_price'],
-                                                                                            "updated_at": datetime.datetime.now().astimezone().strftime(
-                                                                                                "%Y-%m-%d | %H:%M:%S %z | %Z"),
-                                                                                            "status": "canceled",
-                                                                                            "total":
-                                                                                                user_filter['orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'total'], }})
+        user_filter = User.objects.get(id=user_id)
+        now = datetime.datetime.now(tzlocal.get_localzone())
+        user_filter.orders[f"{order_id}"]["status"] = ["canceled", "Отменён"]
+        user_filter.orders[f"{order_id}"]["updated_at"] = now.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+        user_filter.save(update_fields=["orders", "updated_at"])
 
         return HttpResponseRedirect(f'/user_page/{user_id}')
 
@@ -142,8 +85,7 @@ class ChangeOrderView(View):
     initial = {'key': 'value'}
     template_name = 'change_order_page.html'
 
-    def get(self, request, user_id,  order_id_to_change):
-
+    def get(self, request, user_id, order_id):
         try:
             if user_id != request.session['id']:
                 error = 'Доступ запрещён'
@@ -151,55 +93,26 @@ class ChangeOrderView(View):
         except KeyError:
             error = 'Доступ запрещён'
             return render(request, 'error.html', {'error': error})
-
         form = self.form_class(initial=self.initial)
-        active_user_filter = User.objects.values().filter(id=user_id)
-        active_user_order_to_change = ''
+        user_filter = User.objects.get(id=user_id)
+        order_filter = user_filter.orders[f'{order_id}']
+        return render(request, self.template_name, {'user_filter': user_filter,
+                                                    'order_filter': order_filter,
+                                                    'order_id': order_id, 'form': form,
+                                                    'user_id': user_id})
 
-        for _ in active_user_filter:
-            active_user_order_to_change = _['orders'][f'{order_id_to_change}']
-
-        return render(request, self.template_name, {'active_user_filter': active_user_filter,
-                                                    'active_user_order_to_change': active_user_order_to_change,
-                                                    'order_id_to_change': order_id_to_change, 'form': form, 'user_id': user_id, })
-
-    def post(self, request, user_id, order_id_to_change):
+    def post(self, request, user_id, order_id):
         form = self.form_class(request.POST)
+        user_filter = User.objects.get(id=user_id)
 
         if form.is_valid():
+            product_price = (Product.objects.get(id=user_filter.orders[f"{order_id}"]["product_id"])).price
             product_amount = form.cleaned_data['product_amount']
-            user_filter = User.objects.values().get(id=user_id)
-
-            User.objects.filter(id=user_id).update(orders=user_filter['orders'] |
-                                                                     {f'{order_id_to_change}': {"model_name":
-                                                                                                    user_filter[
-                                                                                                        'orders'][
-                                                                                                        f'{order_id_to_change}'][
-                                                                                                        'model_name'],
-                                                                                                "model_name_for_client":
-                                                                                                    user_filter[
-                                                                                                        'orders'][
-                                                                                                        f'{order_id_to_change}'][
-                                                                                                        'model_name_for_client'],
-                                                                                                "product_amount": product_amount,
-                                                                                                "product_price":
-                                                                                                    user_filter[
-                                                                                                        'orders'][
-                                                                                                        f'{order_id_to_change}'][
-                                                                                                        'product_price'],
-                                                                                                "updated_at": datetime.datetime.now().astimezone().strftime(
-                                                                                                    "%Y-%m-%d | %H:%M:%S %z | %Z"),
-                                                                                                "status": user_filter[
-                                                                                                    'orders'][
-                                                                                                    f'{order_id_to_change}'][
-                                                                                                    'status'],
-                                                                                                "total": round(
-                                                                                                    product_amount *
-                                                                                                    user_filter[
-                                                                                                        'orders'][
-                                                                                                        f'{order_id_to_change}'][
-                                                                                                        'product_price'],
-                                                                                                    2), }})
+            now = datetime.datetime.now(tzlocal.get_localzone())
+            user_filter.orders[f"{order_id}"]["product_amount"] = product_amount
+            user_filter.orders[f"{order_id}"]["product_total"] = product_price * product_amount
+            user_filter.orders[f"{order_id}"]["updated_at"] = now.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+            user_filter.save(update_fields=["orders", "updated_at"])
             return HttpResponseRedirect(f'/user_page/{user_id}')
 
         return render(request, self.template_name, {'form': form})

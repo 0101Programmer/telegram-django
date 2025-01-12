@@ -78,7 +78,7 @@
 <br>
 <br>
 
-{% if active_user_data.orders %}
+{% if user_data.orders %}
 <table>
     <caption>Заказы</caption>
     <thead>
@@ -92,34 +92,27 @@
         </tr>
     </thead>
     <tbody>
-    {% for key, val in active_user_data.orders.items %}
+    {% for key, val in user_data.orders.items %}
         <tr>
             <td>{{ key }}</td>
-            {% if val.status == "ordered" %}
-            <td>Оформлен, <a href="confirm_my_order/{{ key }}">оплатить</a> или <a href="change_my_order/{{ key }}">редактировать</a></td>
-            {% elif val.status == "canceled" %}
-            <td>Отменён</td>
-            {% elif val.status == "confirmed" %}
-            <td>Оплачен, <a href="rate_my_order/{{ key }}">оценить</a></td>
+            {% if val.status.0 == "ordered" %}
+            <td>{{ val.status.1 }}, <a href="confirm_my_order/{{ key }}">оплатить</a> или <a href="change_my_order/{{ key }}">редактировать</a></td>
+            {% elif val.status.0 == "canceled" %}
+            <td>{{ val.status.1 }}</td>
+            {% elif val.status.0 == "confirmed" %}
+            <td>{{ val.status.1 }}, <a href="rate_my_order/{{ key }}">оценить</a></td>
             {% else %}
             <td>None</td>
             {% endif %}
             <td>{{ val.product_name }}</td>
             <td>{{ val.product_amount }}</td>
             <td>{{ val.product_total }}</td>
-            {% if val.status == "ordered" %}
             <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
-            {% elif val.status == "canceled" %}
-            <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
-            {% elif val.status == "confirmed" %}
-            <td colspan="2">{{ val.updated_at|slice:":16" }}</td>
-            {% else %}
-            <td>None</td>
-            {% endif %}
         </tr>
     {% endfor %}
     </tbody>
 </table>
+
 {% endif %}
 
 {% endblock %}
