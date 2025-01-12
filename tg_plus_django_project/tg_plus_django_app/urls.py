@@ -5,10 +5,10 @@ from .views_package.category_page_view import CategoryPageViewById, CategoryPage
 from .views_package.confirm_cancel_change_order_views import *
 from .views_package.home_view import *
 from .views_package.login_registration_views import *
-from .views_package.personal_page_view import UserPersonalPageView
+from .views_package.personal_page_view import UserPersonalPageView, ChangeDataView
 from .views_package.product_page_view import ProductPageViewById, ProductPageView
 from .views_package.rate_order_view import RateOrderView
-from .views_package.user_page_and_change_self_data_view import *
+# from .views_package.user_page_and_change_self_data_view import *
 
 urlpatterns = [
     # Главная страница
@@ -32,7 +32,7 @@ urlpatterns = [
     # < --- --- --- --- --- --- >
 
     # Изменение личный данных
-    path('user_page/<int:user_id>/<str:user_data_to_change>/', ChangeDataView.as_view(), name='change_user_data_page'),
+    path('user_page/<int:user_id>/<str:data_to_change>/', ChangeDataView.as_view(), name='change_user_data_page'),
     # < --- --- --- --- --- --- >
 
     # Изменение заказа, его статусов, оценка заказа

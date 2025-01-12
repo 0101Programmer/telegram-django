@@ -24,9 +24,9 @@
 {% endblock %}
 
 {% block content %}
-<h1>Изменение данных пользователя</h1>
+<h1>Изменение данных ({{ data_to_change_label }})</h1>
 <br>
-<strong>Старое значение:</strong> {{ active_user_data_to_change }} ({{ user_data_to_change_name }})
+<strong>Старое значение:</strong> {{ data_to_change_filter }}
 <br>
 <form method="post">
     {% csrf_token %}
@@ -34,7 +34,7 @@
         {{ form.variable.label }}
         {{ form.variable }}
     </div>
-    {% if user_data_to_change == "password" %}
+    {% if data_to_change == "password" %}
     <div class="form-group">
         {{ form.confirmation_variable.label }}
         {{ form.confirmation_variable }}
