@@ -5,10 +5,10 @@ import phonenumbers
 from phonenumbers import carrier
 from phonenumbers.phonenumberutil import number_type, NumberParseException
 
-BOT_API = '6408941142:AAFBETS62eTFEQXGMxc4oEVFKujRe_jT_r0'
+BOT_API = ''
 
-db_password = '1630balalai'
-db_name = 'tg_hardware_store_postgres_db'
+db_password = ''
+db_name = ''
 db_user = "postgres"
 db_port = "5432"
 db_host = "localhost"
