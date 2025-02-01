@@ -5,7 +5,7 @@ import phonenumbers
 from phonenumbers import carrier
 from phonenumbers.phonenumberutil import number_type, NumberParseException
 
-BOT_API = '6408941142:AAH4A5ZDeUHpPrGIJeNJGPCnipORhdrqAi4'
+BOT_API = '6408941142:AAFBETS62eTFEQXGMxc4oEVFKujRe_jT_r0'
 
 db_password = '1630balalai'
 db_name = 'tg_hardware_store_postgres_db'

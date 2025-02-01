@@ -10,9 +10,9 @@ async def tv_samsung_model_choice(call):
 
 
 async def tv_samsung_model_1_choice(call):
-    product_id = 1
-    with open(f'{samsung_tv_models_dict[product_id]["images_paths"][str(product_id)]}', 'rb') as img:
-        await call.message.answer_photo(img, samsung_tv_models_dict[product_id]["name"],
+    product_name = "QE65Q70DAU"
+    with open(f'{samsung_tv_models_dict[product_name]["images_paths"]["1"]}', 'rb') as img:
+        await call.message.answer_photo(img, samsung_tv_models_dict[product_name]["name"][1],
                                         reply_markup=back_to_tv_samsung_model_choice_kb)
-        await call.message.answer(samsung_tv_models_dict[product_id]["description"])
+        await call.message.answer(samsung_tv_models_dict[product_name]["description"])
         await call.answer()

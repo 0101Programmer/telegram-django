@@ -1,8 +1,8 @@
 from tg_plus_django_project.sqlalchemy_connection_config.existed_db_models import Product, session
 samsung_tv_models_dict = {
-    1:
-        {"name": session.get(Product, 1).name,
-         "description": session.get(Product, 1).description,
-         "price": session.get(Product, 1).price,
-         "images_paths": session.get(Product, 1).images_paths},
+    "QE65Q70DAU":
+        {"name": session.query(Product).filter(Product.name.contains(["QE65Q70DAU"])).first().name,
+         "description": session.query(Product).filter(Product.name.contains(["QE65Q70DAU"])).first().description,
+         "price": session.query(Product).filter(Product.name.contains(["QE65Q70DAU"])).first().price,
+         "images_paths": session.query(Product).filter(Product.name.contains(["QE65Q70DAU"])).first().images_paths},
 }

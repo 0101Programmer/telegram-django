@@ -19,9 +19,9 @@ class User(models.Model):
 
 class Product(models.Model):
     name = models.JSONField(help_text='["ps5", "Playstation 5"]')
-    description = models.TextField()
+    description = models.TextField(help_text='Description')
     price = models.FloatField()
     category = models.JSONField(help_text='["game_consoles", "Игровые консоли"]')
-    brand = models.JSONField()
+    brand = models.JSONField(help_text='["sony", "Sony"]')
     ratings = models.JSONField(blank=True, null=True)
     images_paths = models.JSONField(help_text='{"1": "/static/category_pics/game_consoles/ps5.png"}')

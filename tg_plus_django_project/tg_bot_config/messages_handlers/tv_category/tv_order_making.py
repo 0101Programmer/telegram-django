@@ -77,7 +77,7 @@ async def ordering_fsm_handler_step_4(call, state):
         await state.update_data(order_product_amount=product_amount)
         data = await state.get_data()
         await state.update_data(
-            order_total=int(session.query(Product).filter(Product.name == data['order_model']).one().price) * int(
+            order_total=int(session.query(Product).filter(Product.name.contains([data['order_model']])).first().price) * int(
                 data['order_product_amount']))
         user_data = session.query(User).filter(
             User.tg_username == call.from_user.username).one_or_none()
@@ -175,7 +175,10 @@ async def ordering_fsm_handler_step_8(message, state):
                         {"product_name": data["order_model"],
                          "product_amount": data["order_product_amount"],
                          "product_total": data["order_total"],
-                         "status": "confirmed",
+                         "status": [
+                                 "confirmed",
+                                 "Оплачен"
+                             ],
                          "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
                          "card_data": data["order_card_data"]}
                 })
@@ -202,7 +205,10 @@ async def ordering_fsm_handler_step_8(message, state):
                             {"product_name": data["order_model"],
                              "product_amount": data["order_product_amount"],
                              "product_total": data["order_total"],
-                             "status": "confirmed",
+                             "status": [
+                                 "confirmed",
+                                 "Оплачен"
+                             ],
                              "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
                              "card_data": data["order_card_data"]}
                     })
@@ -216,7 +222,10 @@ async def ordering_fsm_handler_step_8(message, state):
                             {"product_name": data["order_model"],
                              "product_amount": data["order_product_amount"],
                              "product_total": data["order_total"],
-                             "status": "confirmed",
+                             "status": [
+                                 "confirmed",
+                                 "Оплачен"
+                             ],
                              "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
                              "card_data": data["order_card_data"]}
                     })
@@ -237,7 +246,10 @@ async def ordering_fsm_handler_step_8(message, state):
                             {"product_name": data["order_model"],
                              "product_amount": data["order_product_amount"],
                              "product_total": data["order_total"],
-                             "status": "confirmed",
+                             "status": [
+                                 "confirmed",
+                                 "Оплачен"
+                             ],
                              "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
                              "card_data": None}
                     })
@@ -251,7 +263,10 @@ async def ordering_fsm_handler_step_8(message, state):
                             {"product_name": data["order_model"],
                              "product_amount": data["order_product_amount"],
                              "product_total": data["order_total"],
-                             "status": "confirmed",
+                             "status": [
+                                 "confirmed",
+                                 "Оплачен"
+                             ],
                              "updated_at": now.strftime("%Y-%m-%d %H:%M:%S %Z%z"),
                              "card_data": None}
                     })
